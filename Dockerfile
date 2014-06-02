@@ -28,7 +28,6 @@ RUN useradd -s /bin/false -r -M graylog2
 # Setup server config
 ADD etc/graylog2.conf /etc/graylog2.conf
 RUN sed -i -e "s/password_secret =$/password_secret = $(pwgen -s 96)/" /etc/graylog2.conf
-RUN sed -i -e "s/root_password_sha2 =$/root_password_sha2 = $(echo -n admin | sha256sum | awk '{print $1}')/" /etc/graylog2.conf
 
 
 # Get the web-interface
