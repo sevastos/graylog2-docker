@@ -24,7 +24,6 @@ RUN tar xzf graylog2-server-0.20.1.tgz && rm graylog2-server-0.20.1.tgz
 RUN mv graylog2-server-0.20.1 /opt/graylog2-server
 
 RUN useradd -s /bin/false -r -M graylog2
-
 # Setup server config
 ADD etc/graylog2.conf /etc/graylog2.conf
 RUN sed -i -e "s/password_secret =$/password_secret = $(pwgen -s 96)/" /etc/graylog2.conf
@@ -39,6 +38,7 @@ RUN mv graylog2-web-interface-0.20.1 /opt/graylog2-web-interface
 RUN sed -i -e "s/application.secret=.*$/application.secret=\"$(pwgen -s 96)\"/" /opt/graylog2-web-interface/conf/graylog2-web-interface.conf
 RUN sed -i -e "s/graylog2-server.uris=.*$/graylog2-server.uris=\"http:\/\/127.0.0.1:12900\/\"/" /opt/graylog2-web-interface/conf/graylog2-web-interface.conf
 
+RUN chown graylog2:root /opt/graylog2-server /opt/graylog2-web-interface
 # Expose ports
 #   - 9000: Web interface
 #   - 12201: GELF UDP
