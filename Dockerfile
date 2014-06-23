@@ -13,15 +13,14 @@ VOLUME ["/data"]
 RUN apt-get install -y mongodb-org-server
 
 # Install elasticsearch
-RUN wget https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-0.90.10.tar.gz
-RUN tar xzf elasticsearch-0.90.10.tar.gz && rm elasticsearch-0.90.10.tar.gz
-RUN mv elasticsearch-0.90.10 /opt/elasticsearch
+RUN wget -O - -o /dev/null https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-0.90.10.tar.gz | tar -xz -C /opt
+RUN ln -s /opt/elasticsearch-0.90.10 /opt/elasticsearch
+
 RUN useradd -s /bin/false -r -M elasticsearch
 
 # Get graylog2 server
-RUN wget https://github.com/Graylog2/graylog2-server/releases/download/0.20.1/graylog2-server-0.20.1.tgz
-RUN tar xzf graylog2-server-0.20.1.tgz && rm graylog2-server-0.20.1.tgz
-RUN mv graylog2-server-0.20.1 /opt/graylog2-server
+RUN wget -O - -o /dev/null https://github.com/Graylog2/graylog2-server/releases/download/0.20.3/graylog2-server-0.20.3.tgz | tar -xz -C /opt
+RUN ln -s /opt/graylog2-server-0.20.3 /opt/graylog2-server
 
 RUN useradd -s /bin/false -r -M graylog2
 # Setup server config
@@ -30,15 +29,14 @@ RUN sed -i -e "s/password_secret =$/password_secret = $(pwgen -s 96)/" /etc/gray
 
 
 # Get the web-interface
-RUN wget https://github.com/Graylog2/graylog2-web-interface/releases/download/0.20.1/graylog2-web-interface-0.20.1.tgz
-RUN tar xzf graylog2-web-interface-0.20.1.tgz && rm graylog2-web-interface-0.20.1.tgz
-RUN mv graylog2-web-interface-0.20.1 /opt/graylog2-web-interface
+RUN wget -O - -o /dev/null https://github.com/Graylog2/graylog2-web-interface/releases/download/0.20.3/graylog2-web-interface-0.20.3.tgz | tar -xz -C /opt
+RUN ln -s /opt/graylog2-web-interface-0.20.3 /opt/graylog2-web-interface
 
 # Setup the web-interface
 RUN sed -i -e "s/application.secret=.*$/application.secret=\"$(pwgen -s 96)\"/" /opt/graylog2-web-interface/conf/graylog2-web-interface.conf
 RUN sed -i -e "s/graylog2-server.uris=.*$/graylog2-server.uris=\"http:\/\/127.0.0.1:12900\/\"/" /opt/graylog2-web-interface/conf/graylog2-web-interface.conf
 
-RUN chown graylog2:root /opt/graylog2-server /opt/graylog2-web-interface
+RUN chown graylog2:root /opt/graylog2-server-0.20.3 /opt/graylog2-web-interface-0.20.3
 # Expose ports
 #   - 9000: Web interface
 #   - 12201: GELF UDP
