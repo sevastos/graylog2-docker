@@ -39,8 +39,25 @@ RUN sed -i -e "s/graylog2-server.uris=.*$/graylog2-server.uris=\"http:\/\/127.0.
 RUN chown graylog2:root /opt/graylog2-server-0.90.0 /opt/graylog2-web-interface-0.90.0
 # Expose ports
 #   - 9000: Web interface
+#   - 12201: GELF TCP
 #   - 12201: GELF UDP
 #   - 12900: REST API
-EXPOSE 9000 12201/udp 12900
+EXPOSE 9000 12201 12201/udp 12900
+
+# FIX ISSUES (WITH B2D?)
+## Elasticsearch
+RUN mkdir -p /opt/elasticsearch/logs
+RUN touch /opt/elasticsearch/logs/graylog2.log
+RUN touch /opt/elasticsearch/logs/graylog2_index_indexing_slowlog.log
+RUN touch /opt/elasticsearch/logs/graylog2_index_search_slowlog.log
+RUN chown -R elasticsearch:root /opt/elasticsearch/logs /opt/elasticsearch/logs/graylog2.log /opt/elasticsearch/logs/graylog2_index_indexing_slowlog.log /opt/elasticsearch/logs/graylog2_index_search_slowlog.log
+RUN chmod -R 777 /opt/elasticsearch/logs /opt/elasticsearch/logs/graylog2.log /opt/elasticsearch/logs/graylog2_index_indexing_slowlog.log /opt/elasticsearch/logs/graylog2_index_search_slowlog.log
+## Mongodb
+RUN mkdir -p /data/db
+## GrayLog2
+RUN mkdir -p /etc/service/graylog2-server/spool
+RUN chmod -R 777 /etc/service/graylog2-server/spool
+RUN mkdir -p /spool
+RUN chmod -R 777 /spool
 
 ADD service /etc/service
