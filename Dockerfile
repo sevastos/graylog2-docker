@@ -52,8 +52,6 @@ RUN touch /opt/elasticsearch/logs/graylog2_index_indexing_slowlog.log
 RUN touch /opt/elasticsearch/logs/graylog2_index_search_slowlog.log
 RUN chown -R elasticsearch:root /opt/elasticsearch/logs /opt/elasticsearch/logs/graylog2.log /opt/elasticsearch/logs/graylog2_index_indexing_slowlog.log /opt/elasticsearch/logs/graylog2_index_search_slowlog.log
 RUN chmod -R 777 /opt/elasticsearch/logs /opt/elasticsearch/logs/graylog2.log /opt/elasticsearch/logs/graylog2_index_indexing_slowlog.log /opt/elasticsearch/logs/graylog2_index_search_slowlog.log
-## Mongodb
-RUN mkdir -p /data/db
 ## GrayLog2
 RUN mkdir -p /etc/service/graylog2-server/spool
 RUN chmod -R 777 /etc/service/graylog2-server/spool

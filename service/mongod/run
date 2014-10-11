@@ -3,13 +3,12 @@ set -e
 
 # Create the log directory if it doesn't exist
 mkdir -p /var/log/mongodb
-chown mongodb:mongodb /var/log/mongodb
+chown -R mongodb:mongodb /var/log/mongodb
 
 # Create the data directory if it doesn't exist
-chmod 775 /data
 mkdir -p /data/mongodb
-chmod 775 /data/mongodb
-chown mongodb:mongodb /data/mongodb
+chown -R mongodb:mongodb /data/mongodb
+chmod -R 777 /data/mongodb
 
 echo "Starting mongodb..."
 exec /sbin/setuser mongodb /usr/bin/mongod --dbpath=/data/mongodb --smallfiles --quiet --logappend --logpath=/var/log/mongodb/mongodb.log
